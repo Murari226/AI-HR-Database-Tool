@@ -2,8 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 app = FastAPI()
+import os
+
 client = MongoClient(
-    "mongodb+srv://murarivenkatraman1418_db_user:murarimongo14@murarihrdb.r596ong.mongodb.net/?retryWrites=true&w=majority&appName=murarihrdb"
+    os.getenv("MONGO_URL")
 )
 db = client["hr_database"]
 
