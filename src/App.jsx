@@ -143,12 +143,12 @@ const addEmployee = async () => {
 
   try {
     await axios.post(
-      "http://127.0.0.1:8000/employees",
+      "https://ai-hr-database-tool.onrender.com/employees",
       newEmployee
     );
 
     const response = await axios.get(
-      "http://127.0.0.1:8000/employees"
+      "https://ai-hr-database-tool.onrender.com/employees"
     );
 
     setEmployeeList(response.data);
@@ -173,12 +173,12 @@ useEffect(() => {
 }, []);
 useEffect(() => {
   axios
-    .get("http://127.0.0.1:8000/employees")
+    .get("https://ai-hr-database-tool.onrender.com/employees")
     .then((response) => {
       console.log("API DATA:", response.data);
       setEmployeeList(response.data);
       axios
-  .get("http://127.0.0.1:8000/stats")
+  .get("https://ai-hr-database-tool.onrender.com/stats")
   .then((response) => {
     setStats(response.data);
   });
@@ -196,11 +196,11 @@ useEffect(() => {
 const deleteEmployee = async (id) => {
   try {
     await axios.delete(
-      `http://127.0.0.1:8000/employees/${id}`
+      `https://ai-hr-database-tool.onrender.com/employees/${id}`
     );
 
     const response = await axios.get(
-      "http://127.0.0.1:8000/employees"
+      "https://ai-hr-database-tool.onrender.com/employees"
     );
 
     setEmployeeList(response.data);
@@ -231,12 +231,12 @@ const startEdit = (employee) => {
   try {
 
     await axios.put(
-      `http://127.0.0.1:8000/employees/${editingId}`,
+      `https://ai-hr-database-tool.onrender.com/employees/${editingId}`,
       updatedEmployee
     );
 
     const response = await axios.get(
-      "http://127.0.0.1:8000/employees"
+      "https://ai-hr-database-tool.onrender.com/employees"
     );
 
     setEmployeeList(response.data);
