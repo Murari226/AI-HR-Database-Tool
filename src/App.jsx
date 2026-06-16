@@ -133,6 +133,14 @@ const salaryChartData = {
   ],
 };
 const addEmployee = async () => {
+  if (
+  !newName.trim() ||
+  !newDepartment.trim() ||
+  !newSalary
+) {
+  alert("Please fill all fields");
+  return;
+}
   const newEmployee = {
     id: employeeList.length + 1,
     name: newName,
