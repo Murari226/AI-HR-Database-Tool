@@ -43,6 +43,8 @@ function App() {
   const [editingId, setEditingId] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [question, setQuestion] = useState("");
+const [aiResponse, setAiResponse] = useState("");
 
 const [username, setUsername] = useState("");
 const [password, setPassword] = useState("");
@@ -141,13 +143,13 @@ const addEmployee = async () => {
   alert("Please fill all fields");
   return;
 }
-  const newEmployee = {
-    id: employeeList.length + 1,
-    name: newName,
-    department: newDepartment,
-    salary: Number(newSalary),
-    status: newStatus,
-  };
+    const newEmployee = {
+ id: Date.now(),
+  name: newName,
+  department: newDepartment,
+  salary: Number(newSalary),
+  status: newStatus,
+};
 
   try {
     await axios.post(
@@ -298,6 +300,32 @@ const exportToCSV = () => {
 
   window.URL.revokeObjectURL(url);
 };
+const askAI = async () => {
+
+  try {
+
+    const response = await axios.post(
+      "https://ai-hr-database-tool.onrender.com/ask-ai",
+      {
+        question: question
+      }
+    );
+
+    setAiResponse(
+      response.data.answer
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    setAiResponse(
+      "Failed to get AI response"
+    );
+
+  }
+
+};
 if (!isLoggedIn) {
 
   return (
@@ -326,6 +354,7 @@ if (!isLoggedIn) {
           value={password}
           onChange={(e) =>
             setPassword(e.target.value)
+
           }
           className="border p-2 w-full mb-3"
         />
@@ -635,6 +664,44 @@ if (!isLoggedIn) {
 )}
 
 <footer className="text-center mt-10 text-gray-400">
+  <div className="bg-slate-800 p-6 rounded-xl mt-8">
+
+  <h2 className="text-2xl font-bold mb-4">
+    AI HR Assistant
+  </h2>
+
+  <input
+    type="text"
+    placeholder="Ask a question..."
+    value={question}
+    onChange={(e) =>
+      setQuestion(e.target.value)
+    }
+    className="border p-3 rounded-lg w-full text-black"
+  />
+
+  <button
+    onClick={askAI}
+    className="mt-4 bg-purple-600 px-4 py-2 rounded-lg"
+  >
+    Ask AI
+  </button>
+
+  {aiResponse && (
+
+    <div className="mt-4 bg-slate-700 p-4 rounded-lg">
+
+      <h3 className="font-bold mb-2">
+        AI Response
+      </h3>
+
+      <p>{aiResponse}</p>
+
+    </div>
+
+  )}
+
+</div>
   AI HR Database Tool © 2026
 </footer>
 
