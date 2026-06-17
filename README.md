@@ -1,16 +1,43 @@
-# React + Vite
+# AI HR Database Tool
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AI-powered HR management system built using React, FastAPI, MongoDB Atlas, and Groq LLM.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Employee Management
+- Add Employee
+- Update Employee
+- Delete Employee
+- HR Analytics Dashboard
+- AI Assistant for Employee Insights
+- MongoDB Atlas Integration
+- Cloud Deployment using Render
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Frontend:
+- React
+- Vite
+- Axios
 
-## Expanding the ESLint configuration
+Backend:
+- FastAPI
+- Python
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Database:
+- MongoDB Atlas
+
+AI:
+- Groq API
+- Llama 3.3 70B
+
+Deployment:
+- Render
+
+## Live Demo
+
+https://ai-hr-database-tool.onrender.com
+
+## Author
+
+Murari MVR
