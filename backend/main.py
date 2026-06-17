@@ -1,15 +1,25 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
-app = FastAPI()
+from groq import Groq
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
+
+app = FastAPI()
+
+client_ai = Groq(
+    api_key=os.getenv("GROQ_API_KEY")
+)
 
 client = MongoClient(
     os.getenv("MONGO_URL")
 )
-db = client["hr_database"]
 
+db = client["hr_database"]
 employees_collection = db["employees"]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,26 +27,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-employees = [
-    {
-        "id": 1,
-        "name": "John",
-        "department": "HR",
-        "salary": 80000,
-        "status": "Active"
-    },
-    {
-        "id": 2,
-        "name": "Murari",
-        "department": "AI",
-        "salary": 100000,
-        "status": "Active"
-    }
-]
 
 @app.get("/")
 def home():
-    return {"message": "HR API Running Successfully"}
+    return {
+        "message": "HR API Running Successfully"
+    }
+
 @app.get("/employees")
 def get_employees():
 
@@ -49,7 +46,6 @@ def get_employees():
 
     return employees
 
-
 @app.post("/employees")
 def add_employee(employee: dict):
 
@@ -58,6 +54,7 @@ def add_employee(employee: dict):
     return {
         "message": "Employee saved to MongoDB"
     }
+
 @app.delete("/employees/{employee_id}")
 def delete_employee(employee_id: int):
 
@@ -68,6 +65,7 @@ def delete_employee(employee_id: int):
     return {
         "deleted_count": result.deleted_count
     }
+
 @app.put("/employees/{employee_id}")
 def update_employee(employee_id: int, employee: dict):
 
@@ -78,7 +76,8 @@ def update_employee(employee_id: int, employee: dict):
 
     return {
         "message": "Employee updated"
-    }           
+    }
+
 @app.get("/stats")
 def get_stats():
 
@@ -120,4 +119,42 @@ def get_stats():
         "activeEmployees": active_employees,
         "averageSalary": round(average_salary),
         "departments": departments
-    }      
+    }
+
+@app.post("/ask-ai")
+def ask_ai(data: dict = Body(...)):
+
+    question = data.get("question", "")
+
+    employees = list(
+        employees_collection.find(
+            {},
+            {"_id": 0}
+        )
+    )
+
+    prompt = f"""
+You are an HR assistant.
+
+Employee data:
+{employees}
+
+User question:
+{question}
+
+Answer based only on the employee data.
+"""
+
+    response = client_ai.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    )
+
+    return {
+        "answer": response.choices[0].message.content
+    }
